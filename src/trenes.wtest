@@ -3,15 +3,19 @@ import vagones.*
 import locomotoras.*
 
 
-describe "tests de trenes" {
+describe "trenes primera parte" {
 
 	const vagonP1 = new VagonPasajeros(largo = 2, ancho = 3)
 	const vagonP2 = new VagonPasajeros(largo = 3, ancho = 1)
 	const vagonC1 = new VagonCarga(cargaMaxima = 10) 
-	const vagonC2 = new VagonCarga(cargaMaxima = 12)
+	const vagonC2 = new VagonCarga(cargaMaxima = 2500)
 	const tren1 = new Tren(vagones = #{vagonP1, vagonP2, vagonC1, vagonC2}, locomotoras = #{})
 	
-	test "formacion" {
+	test "1" {
 		assert. equals(48, tren1.totalPasajerosQuePuedeTransportar())
+	}
+	
+	test "2"{
+		assert.equals(3, tren1.cantVagonesLivianos())
 	}
 }

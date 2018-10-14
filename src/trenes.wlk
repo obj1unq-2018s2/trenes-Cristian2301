@@ -3,8 +3,22 @@ import locomotoras.*
 
 
 class Deposito {
-	var formaciones
+	var property formaciones
 	var locomotorasSueltas
+	
+	method necesitaConductorExperimentado(){
+		return formaciones.any({formacion => formacion.esCompleja()})
+	}
+	
+	method agregarLocomotoraA(formacion){
+		if(not formacion.puedeMoverse()){
+			formacion.locomotoras().add(self.locomotoraAAgregar(formacion))
+		}
+	}
+	
+	method locomotoraAAgregar(formacion){
+		return locomotorasSueltas.find({locomotora => locomotora.arrastreUtil() >= formacion.kilosDeEmpujeQueFaltaParaMoverse()})
+	}
 }
 
 
@@ -25,5 +39,55 @@ class Tren {
 		return locomotoras.min({locomotora => locomotora.velocidadMaxima()}).velocidadMaxima()
 	}
 	
+	method esEficiente(){
+		return locomotoras.all({locomotora => locomotora.arrastreUtil() >= (locomotora.peso() * 5)})
+	}
 	
+	method puedeMoverse(){
+		return self.arrastreUtilTotalLocomotoras() >= self.pesoMaximoTotalVagones()
+	}
+	
+	method arrastreUtilTotalLocomotoras(){
+		return locomotoras.sum({locomotora => locomotora.arrastreUtil()})
+	}
+	
+	method pesoMaximoTotalVagones(){
+		return vagones.sum({vagon => vagon.pesoMaximo()})
+	}
+	
+	method kilosDeEmpujeQueFaltaParaMoverse(){
+		return if(self.puedeMoverse()) 0 else self.pesoMaximoTotalVagones() - self.arrastreUtilTotalLocomotoras()
+	}
+	
+	method VagonesMasPesados(deposito){
+		return deposito.formaciones().map({formacion => formacion.vagonMasPesado()})        //DUDAAAA!!
+	}
+	
+	method vagonMasPesado(){
+		return vagones.max({vagon => vagon.pesoMaximo()})
+	}
+	
+	method esCompleja(){
+		return self.cantUnidades() > 20 or self.pesoTotal() > 10000
+	}
+	
+	method cantUnidades(){
+		return locomotoras.size() + vagones.size()
+	}
+		
+	method pesoTotal(){
+		return self.pesoMaximoTotalVagones() + self.pesoMaximoTotalLocomotoras()
+	}
+	
+	method pesoMaximoTotalLocomotoras(){
+		return locomotoras.sum({locomotora => locomotora.peso()})
+	}
 }
+
+
+
+
+
+
+
+

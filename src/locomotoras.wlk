@@ -1,5 +1,5 @@
 class Locomotora {
-	var peso 
+	var property peso 
 	var pesoMaximoQuePuedeArrastrar 
 	var property velocidadMaxima
 	
