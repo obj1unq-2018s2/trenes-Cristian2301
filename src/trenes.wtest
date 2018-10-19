@@ -5,17 +5,66 @@ import locomotoras.*
 
 describe "trenes primera parte" {
 
-	const vagonP1 = new VagonPasajeros(largo = 2, ancho = 3)
-	const vagonP2 = new VagonPasajeros(largo = 3, ancho = 1)
+	const vagonP1 = new VagonPasajeros(largo = 2, ancho = 3, cantBanios = 3)
+	const vagonP2 = new VagonPasajeros(largo = 3, ancho = 1, cantBanios = 4)
+	const vagonP3 = new VagonPasajeros(largo = 1, ancho = 4, cantBanios = 3)
+	const vagonP4 = new VagonPasajeros(largo = 2, ancho = 2, cantBanios = 2)
 	const vagonC1 = new VagonCarga(cargaMaxima = 10) 
 	const vagonC2 = new VagonCarga(cargaMaxima = 2500)
-	const tren1 = new Tren(vagones = #{vagonP1, vagonP2, vagonC1, vagonC2}, locomotoras = #{})
+	const vagonC3 = new VagonCarga(cargaMaxima = 3000)
+	const vagonC4 = new VagonCarga(cargaMaxima = 1200)
+	const locomotora1 = new Locomotora(peso = 10, pesoMaximoQuePuedeArrastrar = 20, velocidadMaxima = 220)
+	const locomotora2 = new Locomotora(peso = 20, pesoMaximoQuePuedeArrastrar = 40, velocidadMaxima = 110)
+	const locomotora3 = new Locomotora(peso = 25, pesoMaximoQuePuedeArrastrar = 50, velocidadMaxima = 300)
+	const locomotora4 = new Locomotora(peso = 40, pesoMaximoQuePuedeArrastrar = 80, velocidadMaxima = 200)
+	const locomotora5 = new Locomotora(peso = 45, pesoMaximoQuePuedeArrastrar = 85, velocidadMaxima = 150)
+	const locomotora6 = new Locomotora(peso = 15, pesoMaximoQuePuedeArrastrar = 30, velocidadMaxima = 220)
+	const locomotora7 = new Locomotora(peso = 90, pesoMaximoQuePuedeArrastrar = 110, velocidadMaxima = 100)
+	const locomotora8 = new Locomotora(peso = 25, pesoMaximoQuePuedeArrastrar = 50, velocidadMaxima = 300)
+	const locomotora9 = new Locomotora(peso = 25, pesoMaximoQuePuedeArrastrar = 35, velocidadMaxima = 120)
+	const tren1 = new Tren(vagones = #{vagonP1, vagonP2, vagonC1, vagonC2}, locomotoras = #{locomotora1, locomotora2, locomotora3})
+	const tren2 = new Tren(vagones = #{vagonP3, vagonC3}, locomotoras = #{locomotora4, locomotora5})
+	const tren3 = new Tren(vagones = #{vagonP4, vagonC4}, locomotoras = #{locomotora6, locomotora7})
+	const deposito1 = new Deposito(formaciones = #{tren1, tren2, tren3}, locomotorasSueltas = #{locomotora8, locomotora9})
 	
-	test "1" {
+	test "0" {
 		assert. equals(48, tren1.totalPasajerosQuePuedeTransportar())
 	}
 	
-	test "2"{
+	test "1"{
 		assert.equals(3, tren1.cantVagonesLivianos())
 	}
+	
+	test "2"{
+		assert.equals(110, tren1.velocidadMaxima())
+	}
+	
+	test "3"{
+		assert.notThat(tren1.esEficiente())
+	}
+	
+	test "4" {
+		assert.notThat(tren1.puedeMoverse())
+	}
+	
+	test "5" {
+		assert.equals(6295, tren1.kilosDeEmpujeQueFaltaParaMoverse())
+	}
+	
+	test "6" {
+		assert.equals(#{vagonC2, vagonC3, vagonC4}, tren1.vagonesMasPesados(deposito1))
+	}
+	
+	test "7" {
+		assert.notThat(deposito1.necesitaConductorExperimentado())
+	}
+	
+	test "8" {
+		deposito1.agregarLocomotoraA(tren1)
+		assert.equals(#{locomotora1, locomotora2, locomotora3}, tren1.locomotoras())
+	}
 }
+
+
+
+

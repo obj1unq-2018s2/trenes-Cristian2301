@@ -1,6 +1,7 @@
 class VagonPasajeros {
 	var property largo 
 	var property ancho
+	var property cantBanios
 	
 	method cantidadPasajerosQuePuedeTransportar(){
 		if(ancho <= 2.5){

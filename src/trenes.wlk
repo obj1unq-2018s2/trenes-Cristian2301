@@ -11,9 +11,13 @@ class Deposito {
 	}
 	
 	method agregarLocomotoraA(formacion){
-		if(not formacion.puedeMoverse()){
-			formacion.locomotoras().add(self.locomotoraAAgregar(formacion))
+		if(not formacion.puedeMoverse()  and self.existeLocomotoraAAgregar(formacion)){
+			formacion.locomotoras().add({self.locomotoraAAgregar(formacion)})
 		}
+	}
+	
+	method existeLocomotoraAAgregar(formacion){
+		return locomotorasSueltas.any({locomotora => locomotora.arrastreUtil() >= formacion.kilosDeEmpujeQueFaltaParaMoverse()})
 	}
 	
 	method locomotoraAAgregar(formacion){
@@ -24,7 +28,7 @@ class Deposito {
 
 
 class Tren {
-	var locomotoras
+	var property locomotoras
 	var vagones
 	
 	method totalPasajerosQuePuedeTransportar(){
@@ -59,8 +63,8 @@ class Tren {
 		return if(self.puedeMoverse()) 0 else self.pesoMaximoTotalVagones() - self.arrastreUtilTotalLocomotoras()
 	}
 	
-	method VagonesMasPesados(deposito){
-		return deposito.formaciones().map({formacion => formacion.vagonMasPesado()})        //DUDAAAA!!
+	method vagonesMasPesados(deposito){
+		return deposito.formaciones().map({formacion => formacion.vagonMasPesado()}).asSet()    
 	}
 	
 	method vagonMasPesado(){
@@ -84,10 +88,59 @@ class Tren {
 	}
 }
 
+class TrenCortaDistancia inherits Tren {
+	
+    method bienArmada(){
+		return not self.esCompleja()
+	}
+	
+	override method puedeMoverse(){
+		return self.bienArmada()
+	}	
+	
+	override method velocidadMaxima(){
+		return 60
+	}
+}
+
+class TrenLargaDistancia inherits Tren {
+	var uneDosCiudadesGrandes
+	
+	method bienArmada(){
+		return self.tieneBanioPorCada50Pasajeros()
+	}
+	
+	method tieneBanioPorCada50Pasajeros(){
+		return 
+	}
+	
+	override method velocidadMaxima(){
+		if(uneDosCiudadesGrandes){
+			return 200
+		}
+		else{
+			return 150
+		}
+	}
+}
 
 
-
-
+class TrenAltaVelocidad inherits TrenLargaDistancia {
+	var velocidadMaxima
+	
+	override method bienArmada(){
+		return velocidadMaxima >= 250 and self.tieneTodosVagonesLivianos()
+	}
+	
+	method tieneTodosVagonesLivianos(){
+		return self.cantVagonesLivianos() == self.cantTotalVagones()
+	}
+	
+	method cantTotalVagones(){
+		return vagones.size()
+	}
+	
+}
 
 
 
