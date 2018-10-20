@@ -91,12 +91,8 @@ class Tren {
 class TrenCortaDistancia inherits Tren {
 	
     method bienArmada(){
-		return not self.esCompleja()
+		return self.puedeMoverse() and not self.esCompleja()
 	}
-	
-	override method puedeMoverse(){
-		return self.bienArmada()
-	}	
 	
 	override method velocidadMaxima(){
 		return 60
@@ -107,11 +103,11 @@ class TrenLargaDistancia inherits Tren {
 	var uneDosCiudadesGrandes
 	
 	method bienArmada(){
-		return self.tieneBanioPorCada50Pasajeros()
+		return self.puedeMoverse() and (self.totalPasajerosQuePuedeTransportar() / self.cantidadBaniosTotal()) <= 50
 	}
 	
-	method tieneBanioPorCada50Pasajeros(){
-		return 
+	method cantidadBaniosTotal(){
+		return vagones.sum({vagon => vagon.cantBanios()})
 	}
 	
 	override method velocidadMaxima(){

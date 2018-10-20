@@ -20,6 +20,7 @@ class VagonPasajeros {
 
 class VagonCarga {
 	var cargaMaxima
+	const property cantBanios = 0
 	
 	method pesoMaximo(){
 		return cargaMaxima + 160 
