@@ -100,7 +100,7 @@ class TrenCortaDistancia inherits Tren {
 }
 
 class TrenLargaDistancia inherits Tren {
-	var uneDosCiudadesGrandes
+	var ciudades
 	
 	method bienArmada(){
 		return self.puedeMoverse() and (self.totalPasajerosQuePuedeTransportar() / self.cantidadBaniosTotal()) <= 50
@@ -111,7 +111,7 @@ class TrenLargaDistancia inherits Tren {
 	}
 	
 	override method velocidadMaxima(){
-		if(uneDosCiudadesGrandes){
+		if(ciudades.count({ciudad => ciudad.esGrande()}) == 2){
 			return 200
 		}
 		else{
@@ -120,6 +120,9 @@ class TrenLargaDistancia inherits Tren {
 	}
 }
 
+class ciudad {
+	var esGrande 
+}
 
 class TrenAltaVelocidad inherits TrenLargaDistancia {
 	var velocidadMaxima
